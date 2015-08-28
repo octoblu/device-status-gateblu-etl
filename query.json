@@ -1,0 +1,62 @@
+{
+  "aggs": {
+    "flowStart": {
+      "filter": {
+        "and": [{
+          "term": {
+            "payload.workflow.raw": "flow-start"
+          }
+        }]
+      },
+      "aggs": {
+        "group_by_deploymentUuid": {
+          "terms": {
+            "field": "payload.deploymentUuid.raw"
+          },
+          "aggs": {
+            "beginRecord": {
+              "filter": {
+                "and": [{
+                  "term": {
+                    "payload.application.raw": "app-octoblu"
+                  }
+                }, {
+                  "term": {
+                    "payload.state.raw": "begin"
+                  }
+                }]
+              },
+              "aggs": {
+                "beginTime": {
+                  "min": {
+                    "field": "_timestamp"
+                  }
+                }
+              }
+            },
+            "endRecord": {
+              "filter": {
+                "and": [{
+                  "term": {
+                    "payload.application.raw": "flow-deploy-service"
+                  }
+                }, {
+                  "term": {
+                    "payload.state.raw": "end"
+                  }
+                }]
+              },
+              "aggs": {
+                "endTime": {
+                  "min": {
+                    "field": "_timestamp"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
