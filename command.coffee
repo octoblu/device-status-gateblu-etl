@@ -42,7 +42,7 @@ class Command
     uri = url.format
       protocol: 'http'
       host: @destinationElasticsearchUrl
-      pathname: "/gateblu_forever_history/event/#{deployment.deploymentUuid}"
+      pathname: "/device_status_gateblu_forever/event/#{deployment.deploymentUuid}"
 
     request.put uri, json: deployment, (error, response, body) =>
       return callback error if error?
@@ -51,7 +51,7 @@ class Command
 
   search: (body, callback=->) =>
     @sourceElasticsearch.search({
-      index: 'device_status_gateblu'
+      index: 'device_status_gateblu_forever'
       type:  'event'
       search_type: 'count'
       body:  body

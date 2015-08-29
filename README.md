@@ -1,2 +1,2 @@
-# device-status-flow-etl
-ETL for flow deploy metrics
+# gateblu-forever-etl
+ETL for gateblu forever metrics
