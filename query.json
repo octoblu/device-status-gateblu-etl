@@ -1,10 +1,10 @@
 {
   "aggs": {
-    "flowStart": {
+    "addGatebluDevice": {
       "filter": {
         "and": [{
           "term": {
-            "payload.workflow.raw": "flow-start"
+            "payload.workflow.raw": "add-device"
           }
         }]
       },
@@ -18,7 +18,7 @@
               "filter": {
                 "and": [{
                   "term": {
-                    "payload.application.raw": "app-octoblu"
+                    "payload.application.raw": "gateblu-forever"
                   }
                 }, {
                   "term": {
@@ -38,7 +38,7 @@
               "filter": {
                 "and": [{
                   "term": {
-                    "payload.application.raw": "flow-deploy-service"
+                    "payload.application.raw": "gateblu-forever"
                   }
                 }, {
                   "term": {

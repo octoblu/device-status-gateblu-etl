@@ -8,12 +8,12 @@ ElasticSearch = require 'elasticsearch'
 QUERY = require './query.json'
 
 class Command
-  constructor: ->
+  constructor : ->
     sourceElasticsearchUrl       = process.env.SOURCE_ELASTICSEARCH_URL ? 'localhost:9200'
     @destinationElasticsearchUrl = process.env.DESTINATION_ELASTICSEARCH_URL ? 'localhost:9200'
-    @captureRangeInMinutes = process.env.CAPTURE_RANGE_IN_MINUTES
+    @captureRangeInMinutes       = process.env.CAPTURE_RANGE_IN_MINUTES
 
-    @sourceElasticsearch      = new ElasticSearch.Client host: sourceElasticsearchUrl
+    @sourceElasticsearch = new ElasticSearch.Client host: sourceElasticsearchUrl
 
   run: =>
     @search @query(), (error, result) =>
@@ -30,7 +30,7 @@ class Command
     captureSince = moment().subtract parseInt(@captureRangeInMinutes), 'minutes'
 
     query = _.cloneDeep QUERY
-    query.aggs.flowStart.filter.and.push({
+    query.aggs.addGatebluDevice.filter.and.push({
       range:
         _timestamp:
           gte: captureSince
@@ -58,13 +58,13 @@ class Command
     }, callback)
 
   normalize: (result) =>
-    buckets = result.aggregations.flowStart.group_by_deploymentUuid.buckets
+    buckets = result.aggregations.addGatebluDevice.group_by_deploymentUuid.buckets
     _.map buckets, (bucket) =>
       {
         deploymentUuid: bucket.key
         beginTime: bucket.beginRecord.beginTime.value
         endTime:   bucket.endRecord.endTime.value
-        workflow: 'flow-start'
+        workflow: 'add-device'
       }
 
   process: (deployments) =>

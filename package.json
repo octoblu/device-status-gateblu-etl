@@ -1,7 +1,7 @@
 {
-  "name": "device-status-flow-etl",
+  "name": "gateblu-forever-etl",
   "version": "1.0.0",
-  "description": "ETL for flow deploy metrics",
+  "description": "ETL for gateblu metrics",
   "main": "index.js",
   "scripts": {
     "start": "node command.js",
@@ -9,14 +9,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/octoblu/device-status-flow-etl.git"
+    "url": "git+https://github.com/octoblu/gateblu-forever-etl.git"
   },
   "author": "Octoblu Inc",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/octoblu/device-status-flow-etl/issues"
+    "url": "https://github.com/octoblu/gateblu-forever-etl/issues"
   },
-  "homepage": "https://github.com/octoblu/device-status-flow-etl#readme",
+  "homepage": "https://github.com/octoblu/gateblu-forever-etl#readme",
   "dependencies": {
     "async": "^1.4.2",
     "coffee-script": "^1.9.3",
