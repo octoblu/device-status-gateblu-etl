@@ -51,7 +51,7 @@ class Command
 
   search: (body, callback=->) =>
     @sourceElasticsearch.search({
-      index: 'device_status_gateblu_forever'
+      index: 'device_status_gateblu'
       type:  'event'
       search_type: 'count'
       body:  body
