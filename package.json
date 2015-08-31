@@ -1,5 +1,5 @@
 {
-  "name": "gateblu-forever-etl",
+  "name": "device-status-gateblu-etl",
   "version": "1.0.0",
   "description": "ETL for gateblu metrics",
   "main": "index.js",
@@ -9,14 +9,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/octoblu/gateblu-forever-etl.git"
+    "url": "git+https://github.com/octoblu/device-status-gateblu-etl.git"
   },
   "author": "Octoblu Inc",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/octoblu/gateblu-forever-etl/issues"
+    "url": "https://github.com/octoblu/device-status-gateblu-etl/issues"
   },
-  "homepage": "https://github.com/octoblu/gateblu-forever-etl#readme",
+  "homepage": "https://github.com/octoblu/device-status-gateblu-etl#readme",
   "dependencies": {
     "async": "^1.4.2",
     "coffee-script": "^1.9.3",

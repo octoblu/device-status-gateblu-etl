@@ -1,2 +1,2 @@
-# gateblu-forever-etl
+# device-status-gateblu-etl
 ETL for gateblu forever metrics

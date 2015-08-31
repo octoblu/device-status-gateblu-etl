@@ -42,7 +42,7 @@ class Command
     uri = url.format
       protocol: 'http'
       host: @destinationElasticsearchUrl
-      pathname: "/device_status_gateblu_forever/event/#{deployment.deploymentUuid}"
+      pathname: "/gateblu_device_add_history/event/#{deployment.deploymentUuid}"
 
     request.put uri, json: deployment, (error, response, body) =>
       return callback error if error?
