@@ -22,6 +22,7 @@ class Command
       throw error if error?
 
       deployments = @process @normalize result
+      debug 'deployments about to be updated...', deployments
       async.each deployments, @update, (error) =>
         throw error if error?
         debug 'finished....maybe?'
@@ -48,6 +49,8 @@ class Command
       host: @destinationElasticsearchUrl
       pathname: "/gateblu_device_add_history/event/#{deployment.deploymentUuid}"
 
+    debug 'making request to...', uri
+
     request.put uri, json: deployment, (error, response, body) =>
       debug 'got error updating public es', error if error
       debug 'got error updating public es', new Error(JSON.stringify body) if response.statusCode >= 300
@@ -56,6 +59,7 @@ class Command
       callback null
 
   search: (body, callback=->) =>
+    debug 'searching...', body
     @sourceElasticsearch.search({
       index: 'device_status_gateblu'
       type:  'event'
@@ -75,6 +79,7 @@ class Command
       }
 
   process: (deployments) =>
+    debug 'processing...', deployments
     _.map deployments, (deployment) =>
       {workflow, deploymentUuid, beginTime, endTime} = deployment
 
