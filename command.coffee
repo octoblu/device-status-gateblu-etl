@@ -1,6 +1,6 @@
 _ = require 'lodash'
 url = require 'url'
-debug = require 'debug'
+debug = require('debug')('device-status-gateblu:command')
 async = require 'async'
 moment = require 'moment'
 request = require 'request'
