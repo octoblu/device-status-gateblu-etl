@@ -42,7 +42,7 @@ class Command
     return query
 
   update: (deployment, callback) =>
-    debug 'updating....'
+    debug 'updating with....', deployment
     uri = url.format
       protocol: 'http'
       host: @destinationElasticsearchUrl
@@ -64,6 +64,7 @@ class Command
     }, callback)
 
   normalize: (result) =>
+    debug 'got result', result
     buckets = result.aggregations.addGatebluDevice.group_by_deploymentUuid.buckets
     _.map buckets, (bucket) =>
       {
