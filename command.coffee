@@ -1,5 +1,6 @@
 _ = require 'lodash'
 url = require 'url'
+debug = require 'debug'
 async = require 'async'
 moment = require 'moment'
 request = require 'request'
@@ -16,12 +17,14 @@ class Command
     @sourceElasticsearch = new ElasticSearch.Client host: sourceElasticsearchUrl
 
   run: =>
+    debug 'running...'
     @search @query(), (error, result) =>
       throw error if error?
 
       deployments = @process @normalize result
       async.each deployments, @update, (error) =>
         throw error if error?
+        debug 'finished....maybe?'
         process.exit 0
 
   query: =>
@@ -39,12 +42,15 @@ class Command
     return query
 
   update: (deployment, callback) =>
+    debug 'updating....'
     uri = url.format
       protocol: 'http'
       host: @destinationElasticsearchUrl
       pathname: "/gateblu_device_add_history/event/#{deployment.deploymentUuid}"
 
     request.put uri, json: deployment, (error, response, body) =>
+      debug 'got error updating public es', error if error
+      debug 'got error updating public es', new Error(JSON.stringify body) if response.statusCode >= 300
       return callback error if error?
       return callback new Error(JSON.stringify body) if response.statusCode >= 300
       callback null
