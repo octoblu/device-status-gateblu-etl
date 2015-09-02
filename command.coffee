@@ -1,6 +1,5 @@
 _ = require 'lodash'
 url = require 'url'
-debug = require('debug')('device-status-gateblu:command')
 async = require 'async'
 moment = require 'moment'
 request = require 'request'
@@ -17,15 +16,12 @@ class Command
     @sourceElasticsearch = new ElasticSearch.Client host: sourceElasticsearchUrl
 
   run: =>
-    debug 'running...'
     @search @query(), (error, result) =>
       throw error if error?
 
       deployments = @process @normalize result
-      debug 'deployments about to be updated...', deployments
       async.each deployments, @update, (error) =>
         throw error if error?
-        debug 'finished....maybe?'
         process.exit 0
 
   query: =>
@@ -43,23 +39,18 @@ class Command
     return query
 
   update: (deployment, callback) =>
-    debug 'updating with....', deployment
     uri = url.format
       protocol: 'http'
       host: @destinationElasticsearchUrl
       pathname: "/gateblu_device_add_history/event/#{deployment.deploymentUuid}"
 
-    debug 'making request to...', uri
 
     request.put uri, json: deployment, (error, response, body) =>
-      debug 'got error updating public es', error if error
-      debug 'got error updating public es', new Error(JSON.stringify body) if response.statusCode >= 300
       return callback error if error?
       return callback new Error(JSON.stringify body) if response.statusCode >= 300
       callback null
 
   search: (body, callback=->) =>
-    debug 'searching...', body
     @sourceElasticsearch.search({
       index: 'device_status_gateblu'
       type:  'event'
@@ -68,7 +59,6 @@ class Command
     }, callback)
 
   normalize: (result) =>
-    debug 'got result', result
     buckets = result.aggregations.addGatebluDevice.group_by_deploymentUuid.buckets
     _.map buckets, (bucket) =>
       {
@@ -79,7 +69,6 @@ class Command
       }
 
   process: (deployments) =>
-    debug 'processing...', deployments
     _.map deployments, (deployment) =>
       {workflow, deploymentUuid, beginTime, endTime} = deployment
 
