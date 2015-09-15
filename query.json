@@ -15,42 +15,50 @@
             "size": 0
           },
           "aggs": {
-            "beginRecord": {
-              "filter": {
-                "and": [{
-                  "term": {
-                    "payload.application.raw": "gateblu-forever"
-                  }
-                }, {
-                  "term": {
-                    "payload.state.raw": "begin"
-                  }
-                }]
+            "group_by_gatebluUuid": {
+              "terms": {
+                "field": "payload.gatebluUuid.raw",
+                "size": 0
               },
               "aggs": {
-                "beginTime": {
-                  "min": {
-                    "field": "_timestamp"
+                "beginRecord": {
+                  "filter": {
+                    "and": [{
+                      "term": {
+                        "payload.application.raw": "gateblu-forever"
+                      }
+                    }, {
+                      "term": {
+                        "payload.state.raw": "begin"
+                      }
+                    }]
+                  },
+                  "aggs": {
+                    "beginTime": {
+                      "min": {
+                        "field": "_timestamp"
+                      }
+                    }
                   }
-                }
-              }
-            },
-            "endRecord": {
-              "filter": {
-                "and": [{
-                  "term": {
-                    "payload.application.raw": "gateblu-forever"
-                  }
-                }, {
-                  "term": {
-                    "payload.state.raw": "end"
-                  }
-                }]
-              },
-              "aggs": {
-                "endTime": {
-                  "min": {
-                    "field": "_timestamp"
+                },
+                "endRecord": {
+                  "filter": {
+                    "and": [{
+                      "term": {
+                        "payload.application.raw": "gateblu-forever"
+                      }
+                    }, {
+                      "term": {
+                        "payload.state.raw": "end"
+                      }
+                    }]
+                  },
+                  "aggs": {
+                    "endTime": {
+                      "min": {
+                        "field": "_timestamp"
+                      }
+                    }
                   }
                 }
               }

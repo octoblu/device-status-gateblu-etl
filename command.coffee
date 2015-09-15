@@ -61,12 +61,13 @@ class Command
   normalize: (result) =>
     buckets = result.aggregations.addGatebluDevice.group_by_deploymentUuid.buckets
     _.map buckets, (bucket) =>
-      {
-        deploymentUuid: bucket.key
-        beginTime: bucket.beginRecord.beginTime.value
-        endTime:   bucket.endRecord.endTime.value
-        workflow: 'add-device'
-      }
+      _.map bucket.group_by_gatebluUuid.buckets, (gatebluBucket) =>
+        return {
+          deploymentUuid: gatebluBucket.key
+          beginTime: gatebluBucket.beginRecord.beginTime.value
+          endTime:   gatebluBucket.endRecord.endTime.value
+          workflow: 'add-device'
+        }
 
   process: (deployments) =>
     _.map deployments, (deployment) =>
@@ -80,7 +81,7 @@ class Command
       elapsedTime = null
       elapsedTime = endTime - beginTime if beginTime? && endTime?
 
-      {
+      return {
         deploymentUuid: deploymentUuid
         workflow: workflow
         beginTime: formattedBeginTime
