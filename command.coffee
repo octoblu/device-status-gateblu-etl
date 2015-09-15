@@ -60,14 +60,15 @@ class Command
 
   normalize: (result) =>
     buckets = result.aggregations.addGatebluDevice.group_by_deploymentUuid.buckets
-    _.map buckets, (bucket) =>
-      _.map bucket.group_by_gatebluUuid.buckets, (gatebluBucket) =>
-        return {
+    returnData = []
+    _.each buckets, (bucket) =>
+      _.each bucket.group_by_gatebluUuid.buckets, (gatebluBucket) =>
+        returnData.push
           deploymentUuid: gatebluBucket.key
           beginTime: gatebluBucket.beginRecord.beginTime.value
           endTime:   gatebluBucket.endRecord.endTime.value
           workflow: 'add-device'
-        }
+    return returnData
 
   process: (deployments) =>
     _.map deployments, (deployment) =>
