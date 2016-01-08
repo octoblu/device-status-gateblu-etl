@@ -3,17 +3,14 @@ url = require 'url'
 async = require 'async'
 moment = require 'moment'
 request = require 'request'
-ElasticSearch = require 'elasticsearch'
 
 QUERY = require './query.json'
 
 class Command
   constructor : ->
-    sourceElasticsearchUrl       = process.env.SOURCE_ELASTICSEARCH_URL ? 'localhost:9200'
+    @sourceElasticsearchUrl       = process.env.SOURCE_ELASTICSEARCH_URL ? 'localhost:9200'
     @destinationElasticsearchUrl = process.env.DESTINATION_ELASTICSEARCH_URL ? 'localhost:9200'
     @captureRangeInMinutes       = process.env.CAPTURE_RANGE_IN_MINUTES
-
-    @sourceElasticsearch = new ElasticSearch.Client host: sourceElasticsearchUrl
 
   run: =>
     @search @query(), (error, result) =>
@@ -51,12 +48,16 @@ class Command
       callback null
 
   search: (body, callback=->) =>
-    @sourceElasticsearch.search({
-      index: 'device_status_gateblu'
-      type:  'event'
-      search_type: 'count'
-      body:  body
-    }, callback)
+    options =
+      baseUrl: @sourceElasticsearchUrl
+      uri: '/device_status_gateblu/event/_search'
+      json: body
+
+    request.post options, (error, response, body) =>
+      return callback error if error?
+      if response.statusCode > 299
+        return callback new Error("Bad response code from upstream server: #{response.statusCode}, body: #{body}")
+      callback null, body
 
   normalize: (result) =>
     buckets = result.aggregations.addGatebluDevice.group_by_deploymentUuid.buckets

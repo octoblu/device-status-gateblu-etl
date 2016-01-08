@@ -1,4 +1,6 @@
 {
+  "from": 0,
+  "size": 0,
   "aggs": {
     "addGatebluDevice": {
       "filter": {
